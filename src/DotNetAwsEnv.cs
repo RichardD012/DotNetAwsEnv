@@ -10,10 +10,24 @@ namespace DotNetAwsEnv;
 /// </summary>
 public static class AwsEnv
 {
-    public static async Task Load(string? awsEnvPath)
+    public static async Task Load(string path)
     {
-        if (string.IsNullOrEmpty(awsEnvPath))
+        await Load(path, null);
+    }
+
+    public static async Task Load(AwsEnvOptions options)
+    {
+        await Load(null, options);
+    }
+
+    public static async Task Load(string? path = null, AwsEnvOptions? options = null)
+    {
+        //TODO: determine if client token is bad. If so, ignore
+
+        //Hanlde procesing of otpions and path
+        if (string.IsNullOrEmpty(path) && options == null)
         {
+            //worst case scenario - no clue where to get data from
             return;
         }
         using var client = new AmazonSimpleSystemsManagementClient(RegionEndpoint.USEast1);
@@ -23,7 +37,7 @@ public static class AwsEnv
         {
             var request = new GetParametersByPathRequest
             {
-                Path = awsEnvPath,
+                Path = path,
                 Recursive = true,
                 WithDecryption = true,
                 NextToken = nextToken

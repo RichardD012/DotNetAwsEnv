@@ -43,4 +43,6 @@ var configuration = new ConfigurationBuilder()
 
 This will inject these variables into the Configuration Provider and can be used across the application with `IConfiguration`.
 
-*Note:* If you use this method over the `aws-env` it *must* come before the `var builder = WebApplication.CreateBuilder(args);` call.
+If you use this method over the `aws-env` library and expect variables to loaded in the same order, it *must* come before the `var builder = WebApplication.CreateBuilder(args);` call.
+
+This is because the host builder will inject certain pieces of information, such as `ASPNETCORE_ENVIRONMENT` and those will not be picked up if the configuration is loaded after the host is created with `CreateBuilder`.

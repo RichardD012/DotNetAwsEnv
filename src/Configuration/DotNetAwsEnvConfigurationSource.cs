@@ -5,10 +5,10 @@ namespace DotNetAwsEnv.Configuration;
 
 public class DotNetAwsEnvConfigurationSource : IConfigurationSource
 {
-    private readonly string _path;
+    private readonly string? _path;
     
     public DotNetAwsEnvConfigurationSource(
-        string path)
+        string? path)
     {
         _path = path;
     }

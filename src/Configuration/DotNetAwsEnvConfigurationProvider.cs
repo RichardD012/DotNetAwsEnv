@@ -5,10 +5,10 @@ namespace DotNetAwsEnv.Configuration;
 //Most of this is duplciated from https://github.com/tonerdo/dotnet-env/tree/3dbee19770951a75785d398d02d7eed92261d0fe
 public class DotNetAwsEnvConfigurationProvider : ConfigurationProvider
 {
-    private readonly string _path;
+    private readonly string? _path;
 
     public DotNetAwsEnvConfigurationProvider(
-        string path)
+        string? path)
     {
         _path = path;
     }

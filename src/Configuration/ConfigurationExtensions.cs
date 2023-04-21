@@ -6,7 +6,7 @@ public static class ConfigurationBuilderExtensions
 {
     public static IConfigurationBuilder AddDotNetAwsEnv(
         this IConfigurationBuilder builder,
-        string path)
+        string? path)
     {
         builder.Add(new DotNetAwsEnvConfigurationSource(path));
         return builder;

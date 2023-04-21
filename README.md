@@ -17,3 +17,25 @@ PM> Install-Package DotNetAwsEnv
 ```bash
 dotnet add package DotNetAwsEnv
 ```
+
+## Usage
+
+### Load parameters file
+
+`Load()` or `LoadAsync()` will automatically search for variables in parameter store and inject them into the environment.
+
+```csharp
+DotNetAwsEnv.AwsEnv.Load("ssm/path/prefix");
+await DotNetAwsEnv.AwsEnv.LoadAsync("ssm/path/prefix", cancellationToken);
+```
+
+### Using .NET Configuration provider
+
+Integrating with the usual ConfigurationBuilder can be used as well:
+```csharp
+var configuration = new ConfigurationBuilder()
+    .AddDotNetAwsEnv("ssm/path/prefix")
+    .Build();
+```
+
+This will inject these variables into the Configuration Provider and can be used across the application with `IConfiguration`.

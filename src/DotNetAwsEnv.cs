@@ -10,7 +10,7 @@ namespace DotNetAwsEnv;
 /// </summary>
 public static class AwsEnv
 {
-    public static async Task<IEnumerable<KeyValuePair<string, string>>> LoadAsync(string? path)
+    public static async Task<IEnumerable<KeyValuePair<string, string>>> LoadAsync(string? path, CancellationToken cancellationToken = default)
     {
         var resultList = new List<KeyValuePair<string, string>>();
         //Handle processing of options and path
@@ -34,7 +34,7 @@ public static class AwsEnv
                     WithDecryption = true,
                     NextToken = nextToken
                 };
-                var response = await client.GetParametersByPathAsync(request).ConfigureAwait(false);
+                var response = await client.GetParametersByPathAsync(request, cancellationToken).ConfigureAwait(false);
                 nextToken = response.NextToken;
                 parameters.AddRange(response.Parameters);
             } while (!string.IsNullOrEmpty(nextToken));

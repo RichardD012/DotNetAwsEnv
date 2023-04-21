@@ -1,8 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Title>DotNetAwsEnv</Title>
+    <Description>A .NET library to load AWS SSM parameters into the environment.</Description>
+    <AssemblyTitle>DotNetAwsEnv</AssemblyTitle>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <PackageVersion>1.0.0</PackageVersion>
     <TargetFramework>net7.0</TargetFramework>
-    <RootNamespace>dotnet_aws_env</RootNamespace>
+    <AssemblyName>DotNetAwsEnv</AssemblyName>
+    <OutputType>Library</OutputType>
+    <PackageId>DotNetAwsEnv</PackageId>
+    <PackageTags>dotnet;env;dotfiles;mapping;aws;parameter-store</PackageTags>
+    <PackageProjectUrl>https://github.com/RichardD012/DotNetAwsEnv</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/RichardD012/DotNetAwsEnv</RepositoryUrl>
+    <RootNamespace>DotNetAwsEnv</RootNamespace>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

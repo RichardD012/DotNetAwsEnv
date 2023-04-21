@@ -10,20 +10,19 @@ namespace DotNetAwsEnv;
 /// </summary>
 public static class AwsEnv
 {
-
-    public static async Task Load(string? path)
+    public static async Task<IEnumerable<KeyValuePair<string, string>>> LoadAsync(string? path)
     {
-        //TODO: determine if client token is bad. If so, ignore
-
-        //Hanlde procesing of otpions and path
+        var resultList = new List<KeyValuePair<string, string>>();
+        //Handle processing of options and path
         if (string.IsNullOrEmpty(path))
         {
             //worst case scenario - no clue where to get data from
-            return;
+            return resultList;
         }
+
         try
         {
-            using var client = new AmazonSimpleSystemsManagementClient();//TODO: Make options for region
+            using var client = new AmazonSimpleSystemsManagementClient(); //TODO: Make options for region
             var parameters = new List<Parameter>();
             string? nextToken = null;
             do
@@ -35,14 +34,16 @@ public static class AwsEnv
                     WithDecryption = true,
                     NextToken = nextToken
                 };
-                var response = await client.GetParametersByPathAsync(request);
+                var response = await client.GetParametersByPathAsync(request).ConfigureAwait(false);
                 nextToken = response.NextToken;
                 parameters.AddRange(response.Parameters);
             } while (!string.IsNullOrEmpty(nextToken));
+
             foreach (var param in parameters)
             {
                 var name = param.Name.Replace(path, string.Empty);
                 Environment.SetEnvironmentVariable(name, param.Value);
+                resultList.Add(new (name, param.Value));
             }
         }
         catch (Exception e)
@@ -55,5 +56,13 @@ public static class AwsEnv
             throw;
         }
 
+        return resultList;
+    }
+
+    public static IEnumerable<KeyValuePair<string, string>> Load(string? path)
+    {
+        var result = LoadAsync(path);
+        result.Wait();
+        return result.Result;
     }
 }

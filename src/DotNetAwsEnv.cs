@@ -10,46 +10,50 @@ namespace DotNetAwsEnv;
 /// </summary>
 public static class AwsEnv
 {
-    public static async Task Load(string path)
-    {
-        await Load(path, null);
-    }
 
-    public static async Task Load(AwsEnvOptions options)
-    {
-        await Load(null, options);
-    }
-
-    public static async Task Load(string? path = null, AwsEnvOptions? options = null)
+    public static async Task Load(string? path)
     {
         //TODO: determine if client token is bad. If so, ignore
 
         //Hanlde procesing of otpions and path
-        if (string.IsNullOrEmpty(path) && options == null)
+        if (string.IsNullOrEmpty(path))
         {
             //worst case scenario - no clue where to get data from
             return;
         }
-        using var client = new AmazonSimpleSystemsManagementClient(RegionEndpoint.USEast1);
-        var parameters = new List<Parameter>();
-        string? nextToken = null;
-        do
+        try
         {
-            var request = new GetParametersByPathRequest
+            using var client = new AmazonSimpleSystemsManagementClient();//TODO: Make options for region
+            var parameters = new List<Parameter>();
+            string? nextToken = null;
+            do
             {
-                Path = path,
-                Recursive = true,
-                WithDecryption = true,
-                NextToken = nextToken
-            };
-            var response = await client.GetParametersByPathAsync(request);
-            nextToken = response.NextToken;
-            parameters.AddRange(response.Parameters);
-        } while (!string.IsNullOrEmpty(nextToken));
-        foreach (var param in parameters)
-        {
-            var name = param.Name.Replace(awsEnvPath, string.Empty);
-            Environment.SetEnvironmentVariable(name, param.Value);
+                var request = new GetParametersByPathRequest
+                {
+                    Path = path,
+                    Recursive = true,
+                    WithDecryption = true,
+                    NextToken = nextToken
+                };
+                var response = await client.GetParametersByPathAsync(request);
+                nextToken = response.NextToken;
+                parameters.AddRange(response.Parameters);
+            } while (!string.IsNullOrEmpty(nextToken));
+            foreach (var param in parameters)
+            {
+                var name = param.Name.Replace(path, string.Empty);
+                Environment.SetEnvironmentVariable(name, param.Value);
+            }
         }
+        catch (Exception e)
+        {
+            if (e.Message.Contains("token has expired"))
+            {
+                //Ignore this
+            }
+
+            throw;
+        }
+
     }
 }

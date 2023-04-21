@@ -1,4 +1,7 @@
 # DotNetAwsEnv
+[![DotNetAwsEnv Build](https://github.com/RichardD012/DotNetAwsEnv/actions/workflows/main-build.yml/badge.svg)](https://github.com/RichardD012/EnvMapper/actions/workflows/main-build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![NuGet version](https://badge.fury.io/nu/DotNetAwsEnv.svg)](https://www.nuget.org/packages/DotNetAwsEnv)
 
 A .NET library to load AWS parameter store variables into the environment. This is based on the [aws-env](https://github.com/Droplr/aws-env) project for loading data into the environment.
 
